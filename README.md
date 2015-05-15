@@ -12,7 +12,7 @@ I had to disable spring-security's session fixation protection in order to get t
 
 ### Jetty
 
-    mvn jetty:run
+    mvn jetty:run -Djava.security.auth.login.config=etc/login_auto.conf -Djavax.security.auth.useSubjectCredsOnly=false
 
 Point your web browser to http://localhost:8080/spring-security-j2ee-preauth-example - log in as either jimi, fred or john.
 The difference is the following:
