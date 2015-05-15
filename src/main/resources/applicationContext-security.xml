@@ -6,13 +6,12 @@
              http://www.springframework.org/schema/security
              http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
+    <global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
+
     <http create-session="never" use-expressions="true" auto-config="false" entry-point-ref="preAuthenticatedProcessingFilterEntryPoint">
-        <intercept-url pattern="/login/**" access="permitAll"/>
-        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+        <!--<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/**" access="permitAll"/>-->
         <custom-filter position="PRE_AUTH_FILTER" ref="preAuthFilter"/>
-        <!-- Required for Tomcat, will prompt for username / password twice otherwise -->
-        <session-management session-fixation-protection="none"/>
     </http>
 
 </beans:beans>
