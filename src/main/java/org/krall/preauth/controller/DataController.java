@@ -28,6 +28,13 @@ public class DataController {
         return "this is public data";
     }
 
+    @RequestMapping("/public2")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ResponseBody
+    public String getPublicDataOnlyForUser() {
+        return "this is public data";
+    }
+
     @RequestMapping("/mixed")
     @ResponseBody
     public String getMixedData() {

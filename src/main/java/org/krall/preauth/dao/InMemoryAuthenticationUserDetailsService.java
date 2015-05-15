@@ -24,11 +24,19 @@ public class InMemoryAuthenticationUserDetailsService implements AuthenticationU
             userDetails = getAdminUser(token.getName());
         } else if ("fred".equalsIgnoreCase(token.getName())) {
             userDetails = getRegularUser(token.getName());
+        } else if ("john".equalsIgnoreCase(token.getName())) {
+            userDetails = getAdminUser2(token.getName());
         }
         if(userDetails == null) {
             throw new UsernameNotFoundException("Could not load user: " + token.getName());
         }
         return userDetails;
+    }
+
+    private UserDetails getAdminUser2(String username) {
+        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        grantedAuthorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+        return new User(username, "notused", true, true, true, true, grantedAuthorities);
     }
 
     private UserDetails getAdminUser(String username) {
