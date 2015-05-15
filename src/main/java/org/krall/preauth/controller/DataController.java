@@ -1,6 +1,10 @@
 package org.krall.preauth.controller;
 
 import org.krall.preauth.data.Bao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/api")
 public class DataController {
 
-    Bao importantService = new Bao();
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
+    @Autowired
+    private Bao importantService;
 
     @RequestMapping("/public")
     @ResponseBody
@@ -27,15 +34,19 @@ public class DataController {
         String out = "";
         out += getPublicInformation() + "\n";
 
-        out += getConfidentialInformation();
+        try {
+            out += getConfidentialInformation();
+        } catch (AccessDeniedException se) {
+            logger.debug("Ignoring the exception in order to mask the content", se);
+        }
 
         return out;
     }
 
-
     public String getPublicInformation() {
         return "This is public data, anyone can read it, I don't care";
     }
+
 
     @RequestMapping("/confidential")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -44,10 +55,12 @@ public class DataController {
         return "this is confidential data";
     }
 
-
-    // doesn't work
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getConfidentialInformation() {
         return importantService.getConfidentialInformation();
+    }
+
+
+    public void setImportantService(Bao importantService) {
+        this.importantService = importantService;
     }
 }
