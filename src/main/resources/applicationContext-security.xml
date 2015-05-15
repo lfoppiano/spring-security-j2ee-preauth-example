@@ -8,10 +8,14 @@
 
     <global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
 
-    <http create-session="never" use-expressions="true" auto-config="false" entry-point-ref="preAuthenticatedProcessingFilterEntryPoint">
+    <http create-session="never" use-expressions="true" auto-config="false"
+          entry-point-ref="preAuthenticatedProcessingFilterEntryPoint">
         <!--<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/**" access="permitAll"/>-->
         <custom-filter position="PRE_AUTH_FILTER" ref="preAuthFilter"/>
+
+        <!-- Required for Tomcat, will prompt for username / password twice otherwise -->
+        <session-management session-fixation-protection="none"/>
     </http>
 
 </beans:beans>
